@@ -11,7 +11,7 @@ import 'background_monitoring_service.dart';
 /// Prices come only from the real price stream sent by the monitoring
 /// isolate. Nothing is generated here. When the connection is not "connected"
 /// the price map is emptied, so the Dashboard shows "—" instead of an old
-/// price. Without OANDA credentials the status is "disconnected" with the
+/// price. If the Deriv connection fails the status is "error" with the
 /// reason, and there are no prices.
 class MarketPriceAdapter implements ui.MarketPriceGateway {
   MarketPriceAdapter(this._monitoring) {

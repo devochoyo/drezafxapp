@@ -7,7 +7,6 @@ import '../models/alarm_state.dart';
 import '../models/alert_history.dart';
 import '../models/app_settings.dart';
 import '../models/forex_alert.dart';
-import '../models/market_credentials.dart';
 
 /// Minimal async string key-value store. Lets the storage logic be tested
 /// without Flutter plugins.
@@ -69,7 +68,6 @@ class StorageService {
   static const _historyKey = 'drezafx.history';
   static const _settingsKey = 'drezafx.settings';
   static const _alarmStateKey = 'drezafx.alarm_state';
-  static const _credentialsKey = 'drezafx.market_credentials';
 
   /// Oldest history entries beyond this count are dropped.
   static const int maxHistoryEntries = 500;
@@ -187,24 +185,4 @@ class StorageService {
 
   Future<void> saveAlarmState(AlarmState state) =>
       _store.write(_alarmStateKey, jsonEncode(state.toJson()));
-
-  // ------------------------------------------------- market-data credentials
-
-  /// OANDA credentials, or null when none were saved (or unreadable).
-  Future<MarketCredentials?> getMarketCredentials() async {
-    final raw = await _store.read(_credentialsKey);
-    if (raw == null) return null;
-    try {
-      final creds =
-          MarketCredentials.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      return creds.isComplete ? creds : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Future<void> saveMarketCredentials(MarketCredentials credentials) =>
-      _store.write(_credentialsKey, jsonEncode(credentials.toJson()));
-
-  Future<void> clearMarketCredentials() => _store.remove(_credentialsKey);
 }

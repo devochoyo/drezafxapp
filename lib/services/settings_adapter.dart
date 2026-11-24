@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import '../models/app_settings.dart';
-import '../models/market_credentials.dart';
 import '../screens/contracts/stage2_contracts.dart' as ui;
 import 'background_monitoring_service.dart';
 import 'notification_service.dart';
@@ -114,53 +113,7 @@ class SettingsAdapter implements ui.SettingsGateway {
   @override
   Future<String> appVersion() => _system.appVersion();
 
-  // ------------------------------------------------ market-data credentials
-
-  final _setupChanges = StreamController<ui.MarketDataSetup>.broadcast();
-
-  Future<ui.MarketDataSetup> _readSetup() async {
-    final creds = await _storage.getMarketCredentials();
-    return ui.MarketDataSetup(
-      hasCredentials: creds != null,
-      accountId: creds?.accountId ?? '',
-      live: creds?.live ?? false,
-    );
-  }
-
-  @override
-  Stream<ui.MarketDataSetup> watchMarketDataSetup() async* {
-    yield await _readSetup();
-    yield* _setupChanges.stream;
-  }
-
-  @override
-  Future<void> saveMarketDataSetup({
-    required String accountId,
-    String? token,
-    required bool live,
-  }) async {
-    final id = accountId.trim();
-    if (id.isEmpty) throw ArgumentError('Enter the OANDA account ID.');
-    final existing = await _storage.getMarketCredentials();
-    final newToken = (token ?? '').trim();
-    final finalToken = newToken.isNotEmpty ? newToken : (existing?.token ?? '');
-    if (finalToken.isEmpty) throw ArgumentError('Enter the OANDA API token.');
-    await _storage.saveMarketCredentials(
-        MarketCredentials(accountId: id, token: finalToken, live: live));
-    if (!_setupChanges.isClosed) _setupChanges.add(await _readSetup());
-    // The background service reads the credentials when it connects.
-    await _monitoring.reconnectMarket();
-  }
-
-  @override
-  Future<void> clearMarketDataSetup() async {
-    await _storage.clearMarketCredentials();
-    if (!_setupChanges.isClosed) _setupChanges.add(await _readSetup());
-    await _monitoring.reconnectMarket();
-  }
-
   Future<void> dispose() async {
     await _changes.close();
-    await _setupChanges.close();
   }
 }

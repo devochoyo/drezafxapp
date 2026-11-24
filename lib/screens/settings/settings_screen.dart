@@ -25,8 +25,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   SoundGateway? _sounds;
   StreamSubscription<AppSettings>? _settingsSub;
   StreamSubscription<SystemStatus>? _statusSub;
-  StreamSubscription<MarketDataSetup>? _setupSub;
-  MarketDataSetup? _setup;
   StreamSubscription<String?>? _previewSub;
 
   AppSettings? _s;
@@ -55,12 +53,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
       onError: (_) {},
     );
-    _setupSub = _settings!.watchMarketDataSetup().listen(
-      (v) {
-        if (mounted) setState(() => _setup = v);
-      },
-      onError: (_) {},
-    );
     _previewSub = _sounds!.previewingFile.listen((f) {
       if (mounted) setState(() => _previewing = f);
     });
@@ -73,7 +65,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void dispose() {
     _settingsSub?.cancel();
     _statusSub?.cancel();
-    _setupSub?.cancel();
     _previewSub?.cancel();
     _sounds?.stopPreview();
     super.dispose();
@@ -140,13 +131,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const _SectionLabel('MARKET DATA'),
           _Group(children: [
             _ValueRow(
-              label: 'Price provider (OANDA)',
-              value: _setup == null
-                  ? '—'
-                  : (_setup!.hasCredentials ? 'Set up' : 'Not set up'),
-              valueColor: _setup?.hasCredentials == true
-                  ? DzColors.accent
-                  : DzColors.warning,
+              label: 'Price provider (Deriv)',
+              value: 'No setup needed',
+              valueColor: DzColors.accent,
               chevron: true,
               onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
                   builder: (_) => const MarketDataSetupScreen())),

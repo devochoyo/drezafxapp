@@ -124,23 +124,6 @@ class SystemStatus {
   final bool? internetConnected;
 }
 
-/// What the Settings screen may know about the market-data credentials.
-/// The API token itself is never sent to the UI.
-@immutable
-class MarketDataSetup {
-  const MarketDataSetup({
-    required this.hasCredentials,
-    this.accountId = '',
-    this.live = false,
-  });
-
-  final bool hasCredentials;
-  final String accountId;
-
-  /// false = OANDA practice (demo) account, true = live account.
-  final bool live;
-}
-
 /// Active-alarm boundary (backed by AI 1's single audio/alarm service).
 abstract class AlarmGateway {
   /// Emits the alarm currently ringing, or null when none is ringing.
@@ -179,20 +162,6 @@ abstract class SettingsGateway {
 
   /// Version name, e.g. "1.0.0".
   Future<String> appVersion();
-
-  /// OANDA credentials (market-data provider). Current value on subscribe.
-  Stream<MarketDataSetup> watchMarketDataSetup();
-
-  /// Saves the credentials and reconnects the market feed. An empty/null
-  /// [token] keeps the previously saved token. Throws if input is invalid.
-  Future<void> saveMarketDataSetup({
-    required String accountId,
-    String? token,
-    required bool live,
-  });
-
-  /// Removes the saved credentials (prices stop).
-  Future<void> clearMarketDataSetup();
 }
 
 /// Carries the stage-2 gateways. Kept separate from AI 2's [ScreenServices]
