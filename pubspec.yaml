@@ -1,0 +1,47 @@
+name: drezafx
+description: DrezaFx - personal Forex price alerts with a repeating alarm.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Local persistence (alerts, history, settings). SharedPreferencesAsync is
+  # used because it is safe to share between the UI isolate and the
+  # background-service isolate (no stale in-memory cache).
+  shared_preferences: ^2.3.0
+
+  # Alarm + preview audio. Supports the Android "alarm" usage type, looping,
+  # and wake-lock while playing.
+  audioplayers: ^6.1.0
+
+  # Notification channels, alert notifications, monitoring-status
+  # notification, tap handling.
+  flutter_local_notifications: ^19.0.0
+
+  # Android foreground service running a Dart isolate. This is what keeps
+  # monitoring alive while the app is minimised / the screen is locked.
+  flutter_background_service: ^5.0.0
+
+  # Unique alert / history IDs (already used by the previous project).
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/sounds/forex_alarm_bell.wav
+    - assets/sounds/entry_level_reached.wav
+    - assets/sounds/fvg_approaching.wav
+    - assets/sounds/fvg_reached.wav
+    - assets/sounds/order_block_approaching.wav
+    - assets/sounds/order_block_reached.wav
+    - assets/sounds/general_target_reached.wav
