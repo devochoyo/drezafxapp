@@ -288,7 +288,9 @@ class _ChartViewState extends State<ChartView>
         _velT.removeAt(0);
       }
       c.viewport.panByPixels(delta.dx);
-      if (!c.viewport.isPriceScaleManual) {
+      if (c.viewport.freeMove) {
+        c.viewport.panPriceByPixels(delta.dy);
+      } else if (!c.viewport.isPriceScaleManual) {
         c.viewport.autoFitPrice(c.candles);
       }
     }

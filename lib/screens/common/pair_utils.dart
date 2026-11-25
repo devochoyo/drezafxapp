@@ -3,9 +3,12 @@
 /// NOTE: this list is a UI selection list only. It does not imply a working
 /// live feed for any pair; the market-data provider decides what is supported.
 const List<String> kSupportedPairs = [
-  'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'NZDUSD',
-  'EURGBP', 'EURJPY', 'GBPJPY', 'AUDJPY', 'EURAUD', 'EURCHF', 'GBPCHF',
-  'CADJPY', 'CHFJPY', 'NZDJPY', 'AUDNZD', 'GBPAUD', 'GBPCAD', 'XAUUSD',
+  'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'USDCAD', 'AUDUSD', 'NZDUSD',
+  'EURGBP', 'EURJPY', 'GBPJPY', 'AUDJPY', 'AUDCAD', 'AUDCHF', 'AUDNZD',
+  'CADCHF', 'CADJPY', 'CHFJPY', 'EURAUD', 'EURCAD', 'EURCHF', 'EURNZD',
+  'GBPAUD', 'GBPCAD', 'GBPCHF', 'GBPNZD', 'NZDCAD', 'NZDCHF', 'NZDJPY',
+  'USDMXN', 'USDNOK', 'USDSEK', 'USDPLN', 'USDZAR', 'USDSGD', 'USDTRY',
+  'EURNOK', 'EURSEK', 'EURPLN', 'GBPNOK', 'GBPPLN', 'XAUUSD', 'XAGUSD',
 ];
 
 String pairDisplay(String code) =>
@@ -18,6 +21,7 @@ String quoteCurrency(String code) =>
 int pricePrecision(String code) {
   final c = code.toUpperCase();
   if (c.startsWith('XAU')) return 2;
+  if (c.startsWith('XAG')) return 3;
   if (c.endsWith('JPY')) return 3;
   return 5;
 }

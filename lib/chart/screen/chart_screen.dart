@@ -49,6 +49,22 @@ class _ChartScreenState extends State<ChartScreen> {
   bool _ready = false;
   bool _hideBottomNav = false;
 
+  /// Mirrors Viewport.freeMove so the toolbar icon can highlight itself.
+  final ValueNotifier<bool> _freeMove = ValueNotifier<bool>(false);
+
+  void _syncFreeMove() {
+    final on = _controller.viewport.freeMove;
+    if (_freeMove.value != on) _freeMove.value = on;
+  }
+
+  void _toggleFreeMove() {
+    final vp = _controller.viewport;
+    final turnOn = !vp.freeMove;
+    vp.setFreeMove(turnOn);
+    if (!turnOn) _controller.resetPriceScale();
+    _syncFreeMove();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +82,8 @@ class _ChartScreenState extends State<ChartScreen> {
       symbol: widget.initialSymbol ?? defaultSymbol,
       timeframe: ChartTimeframe.defaultTimeframe,
     );
+
+    _controller.viewportChanges.addListener(_syncFreeMove);
 
     _bootstrap();
   }
@@ -100,6 +118,8 @@ class _ChartScreenState extends State<ChartScreen> {
       f.detach();
     }
     _orientation.restore();
+    _controller.viewportChanges.removeListener(_syncFreeMove);
+    _freeMove.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -264,7 +284,16 @@ class _ChartScreenState extends State<ChartScreen> {
   }
 
   List<ChartToolbarItem> _allToolbarItems() {
-    final items = <ChartToolbarItem>[];
+    final items = <ChartToolbarItem>[
+      ChartToolbarItem(
+        id: 'free_move',
+        icon: Icons.open_with,
+        tooltip: 'Free move',
+        order: 5,
+        active: _freeMove,
+        onTap: _toggleFreeMove,
+      ),
+    ];
     for (final f in _features) {
       items.addAll(f.toolbarItems(context));
     }

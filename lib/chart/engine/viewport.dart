@@ -128,6 +128,36 @@ class Viewport extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ---- free move (vertical pan) -------------------------------------------
+  bool _freeMove = false;
+  bool get freeMove => _freeMove;
+
+  /// While on, dragging inside the plot also moves the chart up/down.
+  /// Turning it on freezes the current price range (manual scale); turning it
+  /// off returns to auto-fit.
+  void setFreeMove(bool on) {
+    if (_freeMove == on) return;
+    _freeMove = on;
+    if (on) {
+      _manualPriceScale = true;
+    } else {
+      _manualPriceScale = false;
+    }
+    notifyListeners();
+  }
+
+  /// Pan the price window by [dy] pixels (finger down = chart moves down).
+  void panPriceByPixels(double dy) {
+    final plot = plotRect;
+    if (plot.height <= 0) return;
+    final range = _maxPrice - _minPrice;
+    if (range <= 0) return;
+    final dPrice = dy / plot.height * range;
+    _minPrice += dPrice;
+    _maxPrice += dPrice;
+    notifyListeners();
+  }
+
   /// Call once when a price-axis drag begins.
   void beginPriceDrag() {
     _gMinPrice = _minPrice;
@@ -235,6 +265,7 @@ class Viewport extends ChangeNotifier {
 
   void resetPriceScale() {
     _manualPriceScale = false;
+    _freeMove = false;
     notifyListeners();
   }
 

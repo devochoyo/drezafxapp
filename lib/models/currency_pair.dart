@@ -49,6 +49,7 @@ class CurrencyPair {
 
   static int _precisionFor(String base, String quote) {
     if (base == 'XAU') return 2;
+    if (base == 'XAG') return 3;
     if (quote == 'JPY') return 3;
     return 5;
   }
@@ -66,7 +67,38 @@ class CurrencyPair {
     CurrencyPair._('EUR', 'GBP', 5),
     CurrencyPair._('EUR', 'JPY', 3),
     CurrencyPair._('GBP', 'JPY', 3),
+    CurrencyPair._('AUD', 'JPY', 3),
+    CurrencyPair._('AUD', 'CAD', 5),
+    CurrencyPair._('AUD', 'CHF', 5),
+    CurrencyPair._('AUD', 'NZD', 5),
+    CurrencyPair._('CAD', 'CHF', 5),
+    CurrencyPair._('CAD', 'JPY', 3),
+    CurrencyPair._('CHF', 'JPY', 3),
+    CurrencyPair._('EUR', 'AUD', 5),
+    CurrencyPair._('EUR', 'CAD', 5),
+    CurrencyPair._('EUR', 'CHF', 5),
+    CurrencyPair._('EUR', 'NZD', 5),
+    CurrencyPair._('GBP', 'AUD', 5),
+    CurrencyPair._('GBP', 'CAD', 5),
+    CurrencyPair._('GBP', 'CHF', 5),
+    CurrencyPair._('GBP', 'NZD', 5),
+    CurrencyPair._('NZD', 'CAD', 5),
+    CurrencyPair._('NZD', 'CHF', 5),
+    CurrencyPair._('NZD', 'JPY', 3),
+    CurrencyPair._('USD', 'MXN', 5),
+    CurrencyPair._('USD', 'NOK', 5),
+    CurrencyPair._('USD', 'SEK', 5),
+    CurrencyPair._('USD', 'PLN', 5),
+    CurrencyPair._('USD', 'ZAR', 5),
+    CurrencyPair._('USD', 'SGD', 5),
+    CurrencyPair._('USD', 'TRY', 5),
+    CurrencyPair._('EUR', 'NOK', 5),
+    CurrencyPair._('EUR', 'SEK', 5),
+    CurrencyPair._('EUR', 'PLN', 5),
+    CurrencyPair._('GBP', 'NOK', 5),
+    CurrencyPair._('GBP', 'PLN', 5),
     CurrencyPair._('XAU', 'USD', 2),
+    CurrencyPair._('XAG', 'USD', 3),
   ];
 
   /// MetaTrader-style symbol, e.g. "EURUSD".
