@@ -95,6 +95,63 @@ class Viewport extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ---- gesture baselines (keep zoom / price-scale drags stable) ----------
+  double _gStartIndex = 0;
+  double _gStartCount = 80;
+  double _gMinPrice = 0;
+  double _gMaxPrice = 1;
+
+  /// Call once when a pinch begins; remembers the window it started from.
+  void beginPinch() {
+    _gStartIndex = _startIndex;
+    _gStartCount = _visibleCount;
+  }
+
+  /// Pinch-zoom computed from the window captured in [beginPinch], so the
+  /// result depends only on the total finger scale (no compounding).
+  /// [scale] > 1 = fingers apart = zoom in (fewer candles).
+  void pinchTo(double focalX, double scale) {
+    final plot = plotRect;
+    if (plot.width <= 0 || scale <= 0 || !scale.isFinite) return;
+
+    final fraction = ((focalX - plot.left) / plot.width).clamp(0.0, 1.0);
+    final focalIndex = _gStartIndex + fraction * _gStartCount;
+
+    final newCount = (_gStartCount / scale)
+        .clamp(10.0, math.max(10.0, _candleCount * 1.5))
+        .toDouble();
+    _visibleCount = newCount;
+    _startIndex = (focalIndex - fraction * newCount).clamp(
+      _minStart(),
+      _maxStart(),
+    );
+    notifyListeners();
+  }
+
+  /// Call once when a price-axis drag begins.
+  void beginPriceDrag() {
+    _gMinPrice = _minPrice;
+    _gMaxPrice = _maxPrice;
+  }
+
+  /// Price-axis drag: [totalDy] is the finger travel since the drag began.
+  /// Dragging down expands the range (candles shrink); up shrinks it.
+  /// Exponential and anchored on the middle of the plot, so it is smooth.
+  void priceDragTo(double totalDy) {
+    final plot = plotRect;
+    if (plot.height <= 0) return;
+    final range = _gMaxPrice - _gMinPrice;
+    if (range <= 0) return;
+    _manualPriceScale = true;
+
+    final factor = math.exp(totalDy / plot.height * 0.8);
+    final newRange = (range * factor).clamp(range * 0.05, range * 20.0);
+    final mid = (_gMaxPrice + _gMinPrice) / 2;
+    _minPrice = mid - newRange / 2;
+    _maxPrice = mid + newRange / 2;
+    notifyListeners();
+  }
+
   /// Pinch-zoom anchored at [focalX] (local plot coordinate).
   void zoomAt(double focalX, double scaleDelta) {
     final plot = plotRect;

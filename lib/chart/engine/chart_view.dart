@@ -173,6 +173,7 @@ class _ChartViewState extends State<ChartView>
       final pts = _pointers.values.toList();
       _pinchStartDist = (pts[0] - pts[1]).distance;
       _pinchStartCount = c.viewport.visibleCount;
+      c.viewport.beginPinch();
       _pinchFocal = Offset(
         (pts[0].dx + pts[1].dx) / 2,
         (pts[0].dy + pts[1].dy) / 2,
@@ -216,6 +217,7 @@ class _ChartViewState extends State<ChartView>
 
     if (e.localPosition.dx > plot.right) {
       _isScalingPrice = true;
+      c.viewport.beginPriceDrag();
       return;
     }
 
@@ -240,8 +242,7 @@ class _ChartViewState extends State<ChartView>
           _pinchStartCount != null) {
         final scale = dist / _pinchStartDist!;
         final focal = _pinchFocal ?? e.localPosition;
-        c.viewport.setVisibleCount(_pinchStartCount!);
-        c.viewport.zoomAt(focal.dx, scale);
+        c.viewport.pinchTo(focal.dx, scale);
         if (!c.viewport.isPriceScaleManual) {
           c.viewport.autoFitPrice(c.candles);
         }
@@ -261,7 +262,8 @@ class _ChartViewState extends State<ChartView>
     }
 
     if (_isScalingPrice) {
-      c.viewport.scalePriceBy(delta.dy, e.localPosition.dy);
+      final startY = _downPos?.dy ?? e.localPosition.dy;
+      c.viewport.priceDragTo(e.localPosition.dy - startY);
       return;
     }
 
