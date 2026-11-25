@@ -14,8 +14,14 @@ import 'widgets/dashboard_widgets.dart';
 /// [onOpenHistory] / [onOpenSettings] are hooks for AI 3's screens; when null
 /// the matching controls do nothing.
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key, this.onOpenHistory, this.onOpenSettings});
+  const DashboardScreen({
+    super.key,
+    this.onOpenChart,
+    this.onOpenHistory,
+    this.onOpenSettings,
+  });
 
+  final VoidCallback? onOpenChart;
   final VoidCallback? onOpenHistory;
   final VoidCallback? onOpenSettings;
 
@@ -142,6 +148,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     DzBottomNav(
                       currentIndex: 0,
+                      onChart: widget.onOpenChart,
                       onHistory: widget.onOpenHistory,
                       onSettings: widget.onOpenSettings,
                     ),

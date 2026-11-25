@@ -13,10 +13,12 @@ class AlertHistoryScreen extends StatefulWidget {
   const AlertHistoryScreen({
     super.key,
     this.onOpenHome,
+    this.onOpenChart,
     this.onOpenSettings,
   });
 
   final VoidCallback? onOpenHome;
+  final VoidCallback? onOpenChart;
   final VoidCallback? onOpenSettings;
 
   @override
@@ -113,8 +115,9 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
             ),
             Expanded(child: body),
             DzBottomNav(
-              currentIndex: 1,
+              currentIndex: 2,
               onHome: widget.onOpenHome,
+              onChart: widget.onOpenChart,
               onSettings: widget.onOpenSettings,
             ),
           ],

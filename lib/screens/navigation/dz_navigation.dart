@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../chart/screen/chart_screen.dart';
 import '../alarm/active_alarm_screen.dart';
 import '../contracts/stage2_contracts.dart';
 import '../dashboard/dashboard_screen.dart';
@@ -8,11 +9,10 @@ import '../settings/settings_screen.dart';
 
 /// Central navigation for the combined screen set.
 ///
-/// Structure: Dashboard is the ROOT route. History and Settings are pushed on
-/// top of it (fade transition) and switch between each other with
+/// Structure: Dashboard is the ROOT route. Chart, History and Settings are
+/// pushed on top of it (fade transition) and switch between each other with
 /// pushReplacement, so the stack never grows beyond Dashboard + one tab.
-/// Active Alarm is pushed on top of whatever is showing. Add/Edit/Sound/Delete
-/// are sheets/dialogs opened by AI 2's Dashboard (unchanged).
+/// Active Alarm is pushed on top of whatever is showing.
 class DzNav {
   DzNav._();
 
@@ -24,24 +24,37 @@ class DzNav {
             FadeTransition(opacity: a, child: child),
       );
 
-  /// Back to the Dashboard (root), closing History/Settings/Alarm.
+  /// Back to the Dashboard (root), closing Chart/History/Settings/Alarm.
   static void home(BuildContext context) =>
       Navigator.of(context).popUntil((r) => r.isFirst);
 
-  /// Opens History from the Dashboard, or switches to it from Settings.
-  static void history(BuildContext context, {bool replace = false}) {
-    final page = AlertHistoryScreen(
+  /// Opens Chart from the Dashboard, or switches to it from another tab.
+  static void chart(BuildContext context, {bool replace = false}) {
+    final page = ChartScreen(
       onOpenHome: () => home(context),
+      onOpenHistory: () => history(context, replace: true),
       onOpenSettings: () => settings(context, replace: true),
     );
     final nav = Navigator.of(context);
     replace ? nav.pushReplacement(_fade(page)) : nav.push(_fade(page));
   }
 
-  /// Opens Settings from the Dashboard, or switches to it from History.
+  /// Opens History from the Dashboard, or switches to it from another tab.
+  static void history(BuildContext context, {bool replace = false}) {
+    final page = AlertHistoryScreen(
+      onOpenHome: () => home(context),
+      onOpenChart: () => chart(context, replace: true),
+      onOpenSettings: () => settings(context, replace: true),
+    );
+    final nav = Navigator.of(context);
+    replace ? nav.pushReplacement(_fade(page)) : nav.push(_fade(page));
+  }
+
+  /// Opens Settings from the Dashboard, or switches to it from another tab.
   static void settings(BuildContext context, {bool replace = false}) {
     final page = SettingsScreen(
       onOpenHome: () => home(context),
+      onOpenChart: () => chart(context, replace: true),
       onOpenHistory: () => history(context, replace: true),
     );
     final nav = Navigator.of(context);
@@ -71,12 +84,13 @@ class DzNav {
   static const alarmRouteName = '/active_alarm';
 }
 
-/// The Dashboard with History/Settings wired. USE THIS as the app's `home`.
+/// The Dashboard with Chart/History/Settings wired. USE THIS as the app's `home`.
 class DrezaFxHome extends StatelessWidget {
   const DrezaFxHome({super.key});
 
   @override
   Widget build(BuildContext context) => DashboardScreen(
+        onOpenChart: () => DzNav.chart(context),
         onOpenHistory: () => DzNav.history(context),
         onOpenSettings: () => DzNav.settings(context),
       );

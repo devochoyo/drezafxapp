@@ -11,9 +11,15 @@ import 'market_data_setup_screen.dart';
 /// values go through [SettingsGateway]; the screen has no storage of its own.
 /// Sound preview uses the shared [SoundGateway] (central audio service).
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key, this.onOpenHome, this.onOpenHistory});
+  const SettingsScreen({
+    super.key,
+    this.onOpenHome,
+    this.onOpenChart,
+    this.onOpenHistory,
+  });
 
   final VoidCallback? onOpenHome;
+  final VoidCallback? onOpenChart;
   final VoidCallback? onOpenHistory;
 
   @override
@@ -260,8 +266,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Expanded(child: content),
             DzBottomNav(
-              currentIndex: 2,
+              currentIndex: 3,
               onHome: widget.onOpenHome,
+              onChart: widget.onOpenChart,
               onHistory: widget.onOpenHistory,
             ),
           ],

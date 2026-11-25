@@ -147,19 +147,21 @@ class DzCircleIconButton extends StatelessWidget {
   }
 }
 
-/// Bottom navigation: Home | History | Settings (no other destinations).
-/// History/Settings targets belong to AI 3; the Dashboard forwards callbacks.
+/// Bottom navigation: Home | Chart | History | Settings.
+/// Callbacks are optional so existing call sites stay valid.
 class DzBottomNav extends StatelessWidget {
   const DzBottomNav({
     super.key,
     this.currentIndex = 0,
+    this.onHome,
+    this.onChart,
     this.onHistory,
     this.onSettings,
-    this.onHome,
   });
 
   final int currentIndex;
   final VoidCallback? onHome;
+  final VoidCallback? onChart;
   final VoidCallback? onHistory;
   final VoidCallback? onSettings;
 
@@ -167,9 +169,11 @@ class DzBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = <_NavItem>[
       _NavItem('Home', Icons.home_outlined, onHome),
+      _NavItem('Chart', Icons.candlestick_chart_outlined, onChart),
       _NavItem('History', Icons.history, onHistory),
       _NavItem('Settings', Icons.settings, onSettings),
     ];
+
     return Container(
       decoration: const BoxDecoration(
         color: DzColors.bg2,
