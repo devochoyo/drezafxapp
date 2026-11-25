@@ -139,7 +139,7 @@ class _ChartScreenState extends State<ChartScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !_orientation.isLandscape,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (!didPop && _orientation.isLandscape) {
           await _orientation.enterPortrait();
           if (mounted) setState(() => _hideBottomNav = false);

@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 /// Owns landscape / portrait transitions for the Chart tab.
 ///

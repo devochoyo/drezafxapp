@@ -4,7 +4,6 @@ import '../common/dz_theme.dart';
 import '../common/dz_widgets.dart';
 import '../common/format_utils.dart';
 import '../common/pair_utils.dart';
-import '../contracts/screen_contracts.dart';
 import '../contracts/stage2_contracts.dart';
 
 /// Designs 10 (history list) and 11 (empty). Shows ONLY what

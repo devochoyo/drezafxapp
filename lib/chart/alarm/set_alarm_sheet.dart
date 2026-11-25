@@ -4,7 +4,6 @@ import '../../screens/common/dz_theme.dart';
 import '../../screens/common/dz_widgets.dart';
 import '../../screens/contracts/screen_contracts.dart';
 import '../../screens/sound_selection/sound_selection_screen.dart';
-import '../contracts/chart_contracts.dart';
 import 'alarm_chart_math.dart';
 
 /// Bottom sheet: pair + price, category chips, sound, Set Alarm.

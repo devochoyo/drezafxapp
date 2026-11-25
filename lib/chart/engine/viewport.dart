@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' show Rect, Size;
 
 import 'package:flutter/foundation.dart';
 
@@ -103,7 +104,8 @@ class Viewport extends ChangeNotifier {
     final focalIndex = _startIndex + fraction * _visibleCount;
 
     final newCount = (_visibleCount / scaleDelta)
-        .clamp(10.0, math.max(10.0, _candleCount * 1.5));
+        .clamp(10.0, math.max(10.0, _candleCount * 1.5))
+        .toDouble();
     _visibleCount = newCount;
     _startIndex = (focalIndex - fraction * _visibleCount).clamp(
       _minStart(),

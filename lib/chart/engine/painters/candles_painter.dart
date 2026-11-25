@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Viewport;
 
 import '../../contracts/chart_contracts.dart';
 import '../mapper_impl.dart';

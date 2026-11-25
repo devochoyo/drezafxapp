@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drezafx/chart/contracts/chart_contracts.dart';
-import 'package:drezafx/chart/screen/chart_prefs.dart';
 
 void main() {
   group('ChartPrefs encode/decode helpers', () {

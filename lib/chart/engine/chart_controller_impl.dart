@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Viewport;
 
 import '../../models/currency_pair.dart';
 import '../contracts/chart_contracts.dart';

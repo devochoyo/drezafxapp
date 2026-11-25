@@ -1,4 +1,4 @@
-/// Barrel export for the combined screens (AI 2 + AI 3).
+// Barrel export for the combined screens (AI 2 + AI 3).
 export 'add_alert/add_alert_screen.dart';
 export 'alarm/active_alarm_screen.dart';
 export 'common/dz_theme.dart';

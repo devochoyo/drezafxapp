@@ -1,4 +1,4 @@
-/// Small helpers shared by the model classes.
+// Small helpers shared by the model classes.
 
 /// Finds the enum value called [name], or returns [fallback] when [name] is
 /// null or unknown (e.g. data written by a newer app version).

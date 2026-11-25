@@ -7,6 +7,8 @@ import '../../screens/common/dz_theme.dart';
 import '../contracts/chart_contracts.dart';
 import 'drawing_models.dart';
 
+enum _DragKind { none, move, handle0, handle1 }
+
 /// Drawing overlay (zOrder 100). Handles create / select / move / resize.
 class DrawingOverlay extends ChartOverlay {
   DrawingOverlay({
@@ -32,7 +34,6 @@ class DrawingOverlay extends ChartOverlay {
   bool _creating = false;
 
   // Drag state
-  enum _DragKind { none, move, handle0, handle1 }
   _DragKind _drag = _DragKind.none;
   DrawingShape? _dragShape;
   List<DrawingPoint>? _dragStartPts;
